@@ -18,7 +18,7 @@ module.exports = class ShareCommand extends Command {
                 {
                 	key: 'timeout',
                 	prompt: '',
-                	type: 'integer',
+                	type: 'string',
                 	default: ''
                 }
             ],
@@ -27,17 +27,22 @@ module.exports = class ShareCommand extends Command {
 	}
 
     async run(msg, { member, timeout }) {
-    	
-    	if(member === '' || timeout === ''){
-    		return;
-    	}
-    	
     	const user = new User(member);
-    	
     	await user.prepare();
     	
-    	await user.setTimeout(timeout);
+		if(timeout == ''){
+			const t = await user.getTimeout();
+			if(t == Infinity)
+				msg.say("Infinity")
+			else
+				msg.say(await user.getTimeout()+"ms");
+			return;
+		}
+		if(!Number(timeout)){
+			msg.say("Timeout must be a valid number.");
+		}
     	
+    	await user.setTimeout(Number(timeout));
     	await msg.say("ok");
 	}
 };

@@ -1,12 +1,12 @@
 const { CommandoClient } = require('discord.js-commando');
 const keepAlive = require("./server.js");
-const initClient = require('./crosis/main.js');
+// const initClient = require('./crosis/main.js');
 const path = require("path");
 
 require('dotenv').config();
 
 const client = new CommandoClient({
-    commandPrefix: "~",
+    commandPrefix: process.env.PREFIX,
     owner: ["302968847353249813", "431992878521122827", "580268737907654656"],
     nonCommandEditable: false,
     unknownCommandResponse: false
@@ -33,6 +33,6 @@ client.once("ready", () => {
 client.on('error', console.error); // When error happens, console log it.
 
 keepAlive();
-initClient();
+// initClient();
 
 client.login(process.env.TOKEN);

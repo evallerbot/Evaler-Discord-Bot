@@ -34,7 +34,7 @@ module.exports = class ShareCommand extends Command {
 	            const data = doc.data();
 	            i++;
 
-	            const name = "```" + doc.id + Buffer.alloc(8 - doc.id.length).fill(' ').toString();
+	            const name = "```" + doc.id + Buffer.alloc(16 - doc.id.length).fill(' ').toString();
 	            const lang = data.lang + Buffer.alloc(12 - data.lang.length).fill(' ').toString();
 	            const date = new Date(data.date).toLocaleString();
 
@@ -42,7 +42,7 @@ module.exports = class ShareCommand extends Command {
         	});
         	
         	if(i === 0){
-        		embed.setDescription("You haven't saved any evals yet. Type `~help eval` to see how to save evals.");
+        		embed.setDescription("You haven't saved any evals yet. Type `" + process.env.PREFIX + "help eval` to see how to save evals.");
         	}
         	else {
         		embed.setTitle("Here are your previously saved evals.");

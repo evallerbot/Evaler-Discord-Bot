@@ -30,17 +30,23 @@ module.exports = class extends Command {
         let data = ">>> ```\n";
         
         ps.stdout.on("data", chunk => {
-        	data += chunk.toString();
-        	mess.edit(data + '```');
+          if(data.length < 1997){
+          	data += chunk.toString();
+          	mess.edit(data + '```');
+          }
         });
         
         ps.stderr.on("data", chunk => {
-        	data += chunk.toString();
-        	mess.edit(data + '```');
+          if(data.length < 1997){
+          	data += chunk.toString();
+          	mess.edit(data + '```');
+          }
         });
         
         ps.on("exit", code => {
-        	mess.edit(data + "\nExit " + code + '```');
+          if(data.length < 1990){
+          	mess.edit(data + "\nExit " + code + '```');
+          }
         });
         
         setTimeout (() => {

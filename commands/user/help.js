@@ -39,9 +39,10 @@ module.exports = class SaveCommand extends Command {
 > [code]
 > \\\`\\\`\\\`
 
-Evals the [code] and shows the output. If the optional name is specified, the result is also saved and you can fetch it using the \`~share\` command.
+Evals the [code] and shows the output. If the optional name is specified, the result is also saved and you can fetch it using the \`${process.env.PREFIX}share\` command.
 
 Currently supported languages are,
+ •Volant
  •JavaScript
  •Python
  •Java
@@ -50,11 +51,15 @@ Currently supported languages are,
  •CSharp
  •Rust
  •Ruby
- •Shell Script (sh)
+ •Bash
+ •Sh
  •Swift
- 
-If the language name is not specified, an error is thrown.
-		            `)
+ •FSharp
+ •Raku
+ •Obrya
+ •CookeyLang
+
+If the language name is not specified, an error is thrown.`)
                     .addBlankField(true)
                     .setFooter('Run on Repl.it', 'https://i.imgur.com/89E6Sie.png')
                     .setTimestamp();
@@ -69,12 +74,12 @@ If the language name is not specified, an error is thrown.
                     .setTitle(':wave: | You needed help?')
                     .setDescription('Command `share`!')
                     .addField('Syntax', `
-> \`~share [name]\`
+> \`${process.env.PREFIX}share [name]\`
 
 Fetches the code and output of eval named <name> if it was saved by you.
-If [name] does not exist, an error is thrown. You can use the \`~list\` command to see your saved evals.
+If [name] does not exist, an error is thrown. You can use the \`${process.env.PREFIX}list\` command to see your saved evals.
 
-*Note that in order for share to run, you would need to have previously run \`~eval <name>\` to save your code that you want to share*
+*Note that in order for share to run, you would need to have previously run \`${process.env.PREFIX}eval <name>\` to save your code that you want to share*
                     `)
                     .addBlankField(true)
                     .setFooter('Run on Repl.it', 'https://i.imgur.com/89E6Sie.png')
@@ -90,7 +95,7 @@ If [name] does not exist, an error is thrown. You can use the \`~list\` command 
                     .setTitle(':wave: | You needed help?')
                     .setDescription('Command `list`!')
                     .addField('Syntax', `
-> \`~list\`
+> \`${process.env.PREFIX}list\`
 
 See your shared evals. That's it.
                     `)
@@ -108,7 +113,7 @@ See your shared evals. That's it.
                     .setTitle(':wave: | You needed help?')
                     .setDescription('Command `del`!')
                     .addField('Syntax', `
-> \`~del [name]\`
+> \`${process.env.PREFIX}del [name]\`
 
 Deletes the eval named [name].
                     `)
@@ -126,7 +131,7 @@ Deletes the eval named [name].
                     .setTitle(':wave: | You needed help?')
                     .setDescription('Command `save`!')
                     .addField('Syntax', `
-> \`~save [name] [\`\`\`[code-language] [code] \`\`\`] \`
+> \`${process.env.PREFIX}save [name] [\`\`\`[code-language] [code] \`\`\`] \`
 
 Just saves the code that you inputed.
                     `)
@@ -144,8 +149,8 @@ Just saves the code that you inputed.
                     .setTitle(':wave: | You needed help?')
                     .setDescription('Command `eval_saved`!')
                     .addField('Syntax', `
-> \`~eval_saved [name] \`
-> \`~es [name]\`
+> \`${process.env.PREFIX}eval_saved [name] \`
+> \`${process.env.PREFIX}es [name]\`
 
 reruns the saved code, and overrides the previous saved result.
                     `)
@@ -163,7 +168,7 @@ reruns the saved code, and overrides the previous saved result.
                     .setTitle(':wave: | You needed help?')
                     .setDescription('Command `ban`!')
                     .addField('Syntax', `
-> \`~ban [name] \`
+> \`${process.env.PREFIX}ban [name] \`
 
 **ADMIN ONLY COMMAND**
 Bans a user from using the bot.
@@ -182,7 +187,7 @@ Bans a user from using the bot.
                     .setTitle(':wave: | You needed help?')
                     .setDescription('Command `unban`!')
                     .addField('Syntax', `
-> \`~unban [name] \`
+> \`${process.env.PREFIX}unban [name] \`
 
 **ADMIN ONLY COMMAND**
 Unbans a user from using the bot.
@@ -200,9 +205,9 @@ Unbans a user from using the bot.
                     .setColor('RED')
                     .setTitle(':wave: | You needed help?')
 
-                    .setDescription('Type `~help <command-name>` to view command specific help.')
+                    .setDescription('Type `' + process.env.PREFIX + 'help <command-name>` to view command specific help.')
 
-                    .addField('Prefix', '> The prefix for the bot is: `~`')
+                    .addField('Prefix', '> The prefix for the bot is: `' + process.env.PREFIX + '`')
 
                     .addField('Admin Commands', `
 >>> \`ban\` Bans a user from using the bot.

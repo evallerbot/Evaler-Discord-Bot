@@ -21,16 +21,16 @@ module.exports = class extends Command {
 			    {
                     key: "name",
                     type: "string",
-                    prompt: "",
-                    default: ""
+                    prompt: "buh gib name",
 			    }
 			]
 		});
 	}
 	
 	async run(msg, { name }){
+		const x = evaller.onIdle();
+
 		const user = new User(msg.member);
-		
 		await user.prepare();
 		
 		const info = user.data();
@@ -65,54 +65,59 @@ module.exports = class extends Command {
         const message = await msg.say(embed);
         
         let data = "";
-        
-        evaller.on("out", (out) => {
+		
+		let lastData = data;
+		let editor = setInterval(() => {
+			if(data != lastData) {
+				message.edit(embed);
+				lastData = data;
+			}
+		}, 750);
+
+		const l = async (out) => {
+			data += out;
+            
         	if(data.length < 1024){
-                data += out;
-                embed.fields[1].value = '```sh\n' + (data.length > 500 ? data.substring(0, 500) + "..." : data) + '```';
-                message.edit(embed);
+                embed.fields[1].value = '```sh\n' + data + '```';
+            } else {
+				data = data.substring(0, 1000) + "...";
+                embed.fields[1].value = '```sh\n' + (data) + '```';
+                evaller.off("out", l);
+				clearInterval(editor);
+				editor = null;
+				message.edit(embed);
+				await msg.say("You can't save output larger than 1024 characters.");
             }
-            else {
-                msg.say("You can't save output larger than 1024 characters.");
-                data = "";
-            }
-        });
-        
-        evaller.on("error", (error) => {
-       		if(data.length < 1024){
-                data += error;
-                embed.fields[1].value = '```sh\n' + (data.length > 500 ? data.substring(0, 500) + "..." : data) + '```';
-                message.edit(embed);
-            }
-            else {
-                msg.say("You can't save output larger than 1024 characters.");
-                data = "";
-            }
-        });
-        
+		};
+
+		await x;
+
+        evaller.on("out", l);
         evaller.on("kill", () => {
         	msg.say("Your execution was killed because it was talking too much time to complete.");
         });
-        
-        const res = await evaller.exec(lang, code, info.timeout);
-        
-        //remove all event listeners
-        evaller.clear();
-        
-        if(res){
-            if(data === ""){
-	            embed.fields[1].value = '```sh\nEval Successful!```';
-	            message.edit(embed);
-	        }
-		    
-		    await docRef.set({
-		    	code, lang, 
-		    	output: data,
-		    	date: Date.now()
-		    });
-        }
-        else {
-        	msg.say("The language you specified is not currently supported. Sorry!\n You can do `help eval` to see currently supported languages.");
-        }
+
+		const res = await evaller.exec(lang, code, info.timeout);
+
+		if(editor) {
+			clearInterval(editor);
+			message.edit(embed);
+		}
+		
+        if(!res){
+            msg.say("The language you specified is not currently supported. Sorry!\n You can do `help eval` to see currently supported languages.");
+			return 
+		}
+
+		if(data.trim() === ""){
+			embed.fields[1].value = '```sh\nEval Successful!```';
+			message.edit(embed);
+		}
+		
+		await docRef.set({
+			code, lang, 
+			output: data,
+			date: Date.now()
+		});
 	}
 };
