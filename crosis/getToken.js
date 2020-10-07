@@ -13,7 +13,7 @@ module.exports = () => {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      apiKey: process.env.API_KEY
+      apiKey: process.env.CROSIS_KEY
     })
   }).then(res => res.json());
 };

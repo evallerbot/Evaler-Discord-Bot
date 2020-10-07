@@ -6,21 +6,17 @@ class User {
 	}
 	
 	async prepare(){
-		
 		const doc = await this.docRef.get();
 		
 		if(!doc.exists){
 			await this.docRef.set({
 				ban: false,
 				timeout: 5000
-			});
-			
-	        this.doc = await this.docRef.get();
-		}
-		else {
+			});	
+			this.doc = await this.docRef.get();
+		} else {
 			this.doc = doc;
 		}
-		
 	}
 	
 	async ban(){
@@ -42,6 +38,10 @@ class User {
 			timeout: timeout,
 			ban: this.data().ban
 		});
+	}
+
+	async getTimeout(){
+		return (await this.doc.data()).timeout;
 	}
 	
 	data(){

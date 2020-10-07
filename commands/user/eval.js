@@ -35,6 +35,8 @@ module.exports = class extends Command {
 	}
 	
 	async run(msg, { raw_name, embedded_code }){
+		const x = evaller.onIdle();
+
 		const user = new User(msg.member);
 		
 		await user.prepare();
@@ -49,14 +51,12 @@ module.exports = class extends Command {
         const c = this.parse(embedded_code, raw_name, msg.content);
         
         switch (c){
-            case 1: {
-                await msg.say('Please provide a valid program to run. Type `~help eval` for help.');
-                return;
-        	}
-        	case 2: {
-        		await msg.say('Please use a language code in your code block');
-                return;
-        	}
+		case 1:
+			await msg.say('Please provide a valid program to run. Type `' + process.env.PREFIX + 'help eval` for help.');
+			return;
+		case 2:
+			await msg.say('Please use a language code in your code block');
+			return;
         }
         
         const { lang, code, name } = c;
@@ -75,34 +75,34 @@ module.exports = class extends Command {
         const message = await msg.say(embed);
         
         let data = "";
-        
-        evaller.on("out", (out) => {
-        	if(data.length < 1024){
-                data += out;
-                embed.fields[1].value = '```sh\n' + (data.length > 500 ? data.substring(0, 500) + "..." : data) + '```';
-                message.edit(embed);
+		
+		let lastData = data;
+		let editor = setInterval(() => {
+			if(data != lastData) {
+				message.edit(embed);
+				lastData = data;
+			}
+		}, 750);
+
+		const l = async (out) => {
+			data += out;
+			
+            if(data.length < 1024){
+                embed.fields[1].value = '```sh\n' + data + '```';
+            } else {
+				data = data.substring(0, 1000) + "...";
+                embed.fields[1].value = '```sh\n' + (data) + '```';
+                evaller.off("out", l);
+				message.edit(embed);
+				clearInterval(editor);
+				editor = null;
+				await msg.say("You can't save output larger than 1024 characters.");
             }
-            else {
-                if(name){
-                    msg.say("You can't save output larger than 1024 characters.");
-                }
-                data = "";
-            }
-        });
-        
-        evaller.on("error", (error) => {
-       		if(data.length < 1024){
-                data += error;
-                embed.fields[1].value = '```sh\n' + (data.length > 500 ? data.substring(0, 500) + "..." : data) + '```';
-                message.edit(embed);
-            }
-            else {
-                if(name){
-                    msg.say("You can't save output larger than 1024 characters.");
-                }
-                data = "";
-            }
-        });
+        };
+
+		await x;
+
+        evaller.on("out", l);
         
         evaller.on("kill", () => {
         	msg.say("Your execution was killed because it was talking too much time to complete.");
@@ -110,31 +110,31 @@ module.exports = class extends Command {
         
         const res = await evaller.exec(lang, code, info.timeout);
         
-        //remove all event listeners
-        evaller.clear();
-        
-        if(res){
-	        if(data === ""){
-	            embed.fields[1].value = '```sh\nEval Successful!```';
-	            message.edit(embed);
-	        }
-		    
-	        if(name && data !== undefined){
-	        	
-	            if(name.length > 8){
-	                await msg.say("The name of eval cannot be larger than 8 characters.");
-	                return;
-	            }
-	        	
-	            await this.save(msg.author.id, {
-	                code, lang, name,
-	                output: data
-	            });
-	        }
-        }
-        else {
+		if(!res){
         	msg.say("The language you specified is not currently supported. Sorry!\n You can do `help eval` to see currently supported languages.");
-        }
+			return
+		}
+
+		if(editor) {
+			clearInterval(editor);
+			message.edit(embed);
+		}
+		
+		if(data.trim() === ""){
+			embed.fields[1].value = '```sh\nEval Successful!```';
+			message.edit(embed);
+		}
+		
+		if(name && data !== undefined){
+			if(name.length > 8){
+				await msg.say("The name of eval cannot be larger than 16 characters.");
+				return;
+			}
+			await this.save(msg.author.id, {
+				code, lang: Evaller.languages[lang] || lang, name,
+				output: data
+			});
+		}
 	}
     parse(_code, _name, content){
     	
@@ -147,6 +147,7 @@ module.exports = class extends Command {
             code = content.substring(content.search('`'));
             name = undefined;
         }
+
         //if the code is not an embed
         if(code.substring(0, 3) !== '```'){
             return 1;
@@ -164,16 +165,12 @@ module.exports = class extends Command {
     
     async save(id, {code, output, lang, name}){
         // name is name of the file.
-
         let docRef = db.collection('users').doc(id).collection('saved-code').doc(name);
-        let setName = docRef.set(
-            {
-                code: code,
-                lang: lang,
-                output: output,
-                date: Date.now()
-            }
-        );
-        
+        await docRef.set({
+			code: code,
+			lang: lang,
+			output: output,
+			date: Date.now()
+		});
     }
 };

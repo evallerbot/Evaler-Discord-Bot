@@ -6,6 +6,7 @@ const db = require('../../db/db.js');
 // Thinking this would be used as [<prefix> -share <name>], it will show the code & the result.
 
 module.exports = class ShareCommand extends Command {
+  
 	constructor(client) {
 		super(client, {
 			name: 'share',
@@ -22,40 +23,41 @@ module.exports = class ShareCommand extends Command {
             ]
 		});
 	}
+ 
+  run(message, { name }) {
+    // This is located in `../db/db.js` using firebase
+    // Create a new collection for the user using their discord id or use old one.
+    let docRef = db.collection('users').doc(message.author.id).collection('saved-code').doc(name);
 
-    run(message, { name }) {
-        // This is located in `../db/db.js` using firebase
-        // Create a new collection for the user using their discord id or use old one.
-        let docRef = db.collection('users').doc(message.member.id).collection('saved-code').doc(name);
+    const embed = new RichEmbed;
 
-        const embed = new RichEmbed;
+    embed
+    .setAuthor(message.author.tag, message.author.avatarURL)
+    .setTimestamp()
+    .setColor("GREEN");
+    
+    docRef.get().then(doc => {
+    	
+        if (!doc.exists) {
+        	embed.setDescription('Sorry! We couldn\'t find a record with that name. You can use `' + process.env.PREFIX + 'list` command to view all your previous saves.');
+            return message.embed(embed);
+        }
+        else{
+        	const data = doc.data();
 
-        embed
-        .setAuthor(message.author.tag, message.author.avatarURL)
-        .setTimestamp()
-        .setColor("GREEN");
-        
-        docRef.get().then(doc => {
-        	
-            if (!doc.exists) {
-            	embed.setDescription('Sorry! We couldn\'t find a record with that name. You can use `~list` command to view all your previous saves.');
-                return message.embed(embed);
-            }
-            else{
-            	const data = doc.data();
-
-                embed
-                .setTitle(name)
-                .setDescription("Your previous save with the name of: `" + name + "`")
-                .addField("Code", "```" + data.lang + "\n" + data.code + "\n```")
-                .addField("Output", "```sh\n" + data.output + "\n```");
-                
-                return message.embed(embed);
-            }
-        })
-        .catch(err => {
-            console.log('Error getting document', err);
-            return message.say('Error!');
-        });
+            embed
+            .setTitle(name)
+            .setDescription("Your previous save with the name of: `" + name + "`")
+            .addField("Code", "```" + data.lang + "\n" + data.code + "\n```")
+            .addField("Output", "```sh\n" + data.output + "\n```")
+		      	.addField("Online View", `https://evaller.repl.co/${message.author.id}/${name}`);
+            
+            return message.embed(embed);
+        }
+    })
+    .catch(err => {
+        console.log('Error getting document', err);
+        return message.say('Error!');
+    });
 	}
 };

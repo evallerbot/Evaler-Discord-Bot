@@ -1,0 +1,2 @@
+language = "nodejs"
+run = "npx pm2 stop main \n npx pm2 start -f main.js --name \"main\" && npx pm2 monit"
