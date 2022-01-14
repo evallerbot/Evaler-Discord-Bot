@@ -35,8 +35,8 @@ module.exports = class extends Command {
 	}
 	
 	async run(msg, { raw_name, embedded_code }){
-        msg.say("Repl's crosis API is currently unavailable, sorry.");
-        return;
+    msg.say("Repl's crosis API is currently unavailable, sorry.");
+    return;
         
 		const x = evaller.onIdle();
 		const user = new User(msg.member);
@@ -77,7 +77,6 @@ module.exports = class extends Command {
         
         let data = "";
 		let lastData = data;
-
 		let editor = setInterval(() => {
 			if(data != lastData) {
 				message.edit(embed);
@@ -94,7 +93,6 @@ module.exports = class extends Command {
 				data = data.substring(0, 1000) + "...";
                 embed.fields[1].value = '```sh\n' + (data) + '```';
                 evaller.off("out", l);
-				
                 message.edit(embed);
 				clearInterval(editor);
 				
@@ -112,6 +110,7 @@ module.exports = class extends Command {
         const res = await evaller.exec(lang, code, info.timeout);
 		
         if(!res){
+
         	msg.say("The language you specified is not currently supported. Sorry!\n You can do `help eval` to see currently supported languages.");
 			return
 		}
@@ -120,6 +119,7 @@ module.exports = class extends Command {
 			clearInterval(editor);
 			message.edit(embed);
 		}
+
 		if(data.trim() === ""){
 			embed.fields[1].value = '```sh\nEval Successful!```';
 			message.edit(embed);
