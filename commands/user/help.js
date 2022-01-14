@@ -204,7 +204,9 @@ Unbans a user from using the bot.
 				helpPrompt
 					.setColor('RED')
 					.setTitle(':wave: | You needed help?')
+
 					.setDescription('Type `' + process.env.PREFIX + 'help <command-name>` to view command specific help.')
+
 					.addField('Prefix', '> The prefix for the bot is: `' + process.env.PREFIX + '`')
 
 					.addField('Admin Commands', `

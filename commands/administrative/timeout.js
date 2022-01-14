@@ -41,4 +41,7 @@ module.exports = class ShareCommand extends Command {
 		if(!Number(timeout)){
 			msg.say("Timeout must be a valid number.");
 		}
+    	await user.setTimeout(Number(timeout));
+    	await msg.say("ok");
+	}
 };
