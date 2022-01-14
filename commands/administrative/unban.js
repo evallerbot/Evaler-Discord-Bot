@@ -20,12 +20,7 @@ module.exports = class ShareCommand extends Command {
 	}
 
     async run(msg, { member }) {
-    	const user = new User(member);
-    	
-    	await user.prepare();
-    	
-    	await user.unban();
-    	
+    	await (new User(member)).unban();
     	await msg.say("ok");
 	}
 };

@@ -21,18 +21,17 @@ client.registry
     ])
     .registerDefaultGroups()
     /*.registerDefaultCommands()*/
-    .registerCommandsIn(
-        path.join(__dirname, 'commands')
-    );
-
+    //.registerCommandsIn(
+    //    path.join(__dirname, 'commands')
+    //);
 
 client.once("ready", () => {
     console.log("Logged in as " + client.user.tag);
 });
 
-client.on('error', console.error); // When error happens, console log it.
+client.on('error', console.error);
 
 keepAlive();
 // initClient();
 
-client.login(process.env.TOKEN);
+client.login(process.env.TOKEN)

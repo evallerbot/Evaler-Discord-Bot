@@ -10,28 +10,28 @@ module.exports = class ShareCommand extends Command {
 			group: 'user',
 			memberName: 'del',
 			description: 'Allows the user to delete their previously named evals.',
-            args: [
-                {
-                    key: 'name',
-                    prompt: 'What is the name of the saved eval?',
-                    type: 'string',
-                }
-            ]
+			args: [
+				{
+					key: 'name',
+					prompt: 'What is the name of the saved eval?',
+					type: 'string',
+				}
+			]
 		});
 	}
 
-    async run(message, { name }) {
-    	
-        await db.collection('users').doc(message.member.id).collection('saved-code').doc(name).delete();
+	async run(message, { name }) {
+		
+		await db.collection('users').doc(message.member.id).collection('saved-code').doc(name).delete();
 
-        const embed = new RichEmbed;
+		const embed = new RichEmbed;
 
-        embed
-        .setAuthor(message.author.tag, message.author.avatarURL)
-        .setTimestamp()
-        .setDescription("`" + name + "` deleted successfully")
-        .setColor("GREEN");
-        
-        message.embed(embed);
+		embed
+		.setAuthor(message.author.tag, message.author.avatarURL)
+		.setTimestamp()
+		.setDescription("`" + name + "` deleted successfully")
+		.setColor("GREEN");
+		
+		message.embed(embed);
 	}
 };

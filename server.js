@@ -13,7 +13,6 @@ server.get("/", (req, res) => {
 });
 
 server.get("/:id/:name", (req, res) => {
-   
    const id = req.param("id");
    const name = req.param("name");
    
@@ -23,8 +22,7 @@ server.get("/:id/:name", (req, res) => {
       if(doc.exists){
         const data = doc.data();
         res.json(data);
-      }
-      else {
+      } else {
         res.status(404);
         res.send("No such record.");
       }

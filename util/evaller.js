@@ -30,8 +30,8 @@ class Evaller extends EventEmitter {
 	
 	async exec(lang, code, timeout){
 		const [command, init] = Evaller.getArgs(lang.toLowerCase(), code);
-        
-        if(!command){
+		
+		if(!command){
 			return 0;
 		}
 		this.state = 1;
@@ -73,11 +73,11 @@ class Evaller extends EventEmitter {
 		
 		if(timeout != Infinity){
 			timer = setTimeout(() => {
-                this.emit("out", "Killed!");
+				this.emit("out", "Killed!");
 				this.emit("kill");
 				this.clear();
 				this.restartChannel();
-            }, timeout);
+			}, timeout);
 		}
 
 		try { await this.channel.request({ exec: { args: command, blocking: false } }) }
@@ -92,15 +92,15 @@ class Evaller extends EventEmitter {
 		await this.prepare();
 	}
 
-    clear(){
-    	this.removeAllListeners("out");
-    	this.removeAllListeners("kill");
+	clear(){
+		this.removeAllListeners("out");
+		this.removeAllListeners("kill");
 		
 		this.state = 0;
 		if (this.idleHandles.length > 0) {
 			this.idleHandles.shift()();
 		}
-    }
+	}
 	
   	static getArgs(lang, code){
 		let command, init;
@@ -195,15 +195,16 @@ class Evaller extends EventEmitter {
 }
 
 Evaller.languages = {
-    'javascript': ['js','nodejs'],
-    'python': ['py'],
-    'cpp': ['c++'],
-    'csharp': ['c#'],
-    'fsharp': ['f#'],
-    'raku': ['perl6'],
+	'javascript': ['js','nodejs'],
+	'python': ['py'],
+	'cpp': ['c++'],
+	'csharp': ['c#'],
+	'fsharp': ['f#'],
+	'raku': ['perl6'],
 	'obrya': ['oba'],
 	'volant': ['vo'],
-	'cookeylang': ['clf']
+	'cookeylang': ['clf'],
+	'rust': ['rs']
 };
 
 module.exports = Evaller;

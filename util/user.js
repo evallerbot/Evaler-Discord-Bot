@@ -4,7 +4,6 @@ class User {
 	constructor(user){
 		this.docRef = db.collection('guilds').doc(user.guild.id).collection('members').doc(user.id);
 	}
-	
 	async prepare(){
 		const doc = await this.docRef.get();
 		
@@ -18,32 +17,18 @@ class User {
 			this.doc = doc;
 		}
 	}
-	
 	async ban(){
-		this.docRef.set({
-			timeout: this.data().timeout,
-			ban: true
-		});
+		this.docRef.update({ ban: true });
 	}
-	
 	async unban(){
-		await this.docRef.set({
-			timeout: this.data().timeout,
-			ban: false
-		});
+		await this.docRef.update({ ban: false });
 	}
-	
 	async setTimeout(timeout){
-		await this.docRef.set({
-			timeout: timeout,
-			ban: this.data().ban
-		});
+		await this.docRef.update({ timeout: timeout });
 	}
-
-	async getTimeout(){
-		return (await this.doc.data()).timeout;
+	getTimeout(){
+		return this.doc.data().timeout;
 	}
-	
 	data(){
 		return this.doc.data();
 	}

@@ -19,7 +19,6 @@ module.exports = class extends Command {
 			]
 		});
 	}
-	
 	async run(msg, { arg }){
         const mess = await msg.say("...");
         
