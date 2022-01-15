@@ -36,6 +36,7 @@ export class UserCommand extends SubCommandPluginCommand {
 			.setColor("DARK_AQUA")
 			.addField("Code", codeBlock(lang, (code.length > 500 ? code.substring(0, 500) + "..." : code)))
 			.addField("Output", codeBlock("sh", "Code running please wait..."))
+			.addField("Web View", `https://evaller.repl.co/${message.author.id}/${name}`)
 			.setTimestamp();
 
 		const msg = await message.reply({ embeds: [embed] });

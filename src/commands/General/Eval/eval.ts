@@ -109,6 +109,9 @@ export class UserCommand extends SubCommandPluginCommand {
 				return;
 			}
 			await this.save(msg.author.id, { code, lang, name, output: data });
+
+			embed.addField("Web View", `https://evaller.repl.co/${message.author.id}/${name}`);
+			await msg.edit({ embeds: [embed] });
 		}
 	}
 	parse(_code: string, _name: string, content: string): { error?: string, data?: { lang: keyof typeof Languages, code: string, name: string | undefined } } {
