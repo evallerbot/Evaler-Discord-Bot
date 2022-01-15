@@ -17,7 +17,8 @@ export class UserCommand extends Command {
 	public async messageRun(message: Message, args: Args) {
     const msg = await send(message, "...");
 		const cmd = await args.pick("string");
-		const ps = spawn("pm2", cmd.split(" "), { shell: "/bin/bash" });
+
+		const ps = spawn("pm2", message.content.slice(message.content.search(cmd)).split(/\s+/g), { shell: "/bin/bash" });
 
     let data = "";
 
