@@ -17,7 +17,7 @@ export const fetchConnectionMetadata = async (signal: AbortSignal): Promise<Fetc
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Cookie": `connect.sid=${process.env.REPLIT_SID}; replit:authed=1; cf_clearance=Mby5VZUHutVmTMs.ajDGl16YJuHKx52wET7yURdEdbM-1640882107-0-150;`,
+        "Cookie": `connect.sid=${process.env.REPL_SID}; replit:authed=1; cf_clearance=Mby5VZUHutVmTMs.ajDGl16YJuHKx52wET7yURdEdbM-1640882107-0-150;`,
         "X-Requested-With": "https://replit.com",
         "Origin": "https://replit.com",
         "User-Agent": " Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36",
