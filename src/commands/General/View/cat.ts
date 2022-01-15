@@ -30,7 +30,7 @@ export class UserCommand extends SubCommandPluginCommand {
 			.setDescription("Your previous save with the name of: `" + name + "`")
 			.addField("Code", "```" + data.lang + "\n" + data.code + "\n```")
 			.addField("Output", "```sh\n" + data.output + "\n```")
-			.addField("Online View", `https://evaller.repl.co/${message.author.id}/${name}`);
+			.addField("Web View", `https://evaller.repl.co/${message.author.id}/${name}`);
 
 		return message.reply({ embeds: [embed] });
 	}
