@@ -28,6 +28,7 @@ const defaultEmbed = (embed: MessageEmbed, prefix?: SapphirePrefix) => {
 		.setFooter({ text: 'Run on Repl.it', iconURL: 'https://i.imgur.com/89E6Sie.png' })
 		.setTimestamp();
 };
+
 @ApplyOptions<CommandOptions>({
 	description: 'Shows help'
 })
@@ -46,12 +47,14 @@ export class UserCommand extends Command {
 			.setFooter({ text: 'Run on Repl.it', iconURL: 'https://i.imgur.com/89E6Sie.png' })
 			.setTimestamp();
 
+    // If there are arguments then just do default
 		if (!specificCommand.success) {
 			defaultEmbed(helpPrompt, prefix);
 
 			return await message.reply({ embeds: [helpPrompt] });
 		}
 
+    // Get the first argument
 		switch (specificCommand.value[0]) {
 			/*
 			 * EVAL *
@@ -86,7 +89,7 @@ Currently supported languages are,
  •CookeyLang
 If the language name is not specified, an error is thrown.`
 					)
-					.addField('\u200b', '\u200b');
+
 				break;
 
 			/*
@@ -104,7 +107,7 @@ If [name] does not exist, an error is thrown. You can use the \`${process.env.PR
 *Note that in order for share to run, you would need to have previously run \`${process.env.PREFIX}eval <name>\` to save your code that you want to share*
 					`
 					)
-					.addField('\u200b', '\u200b');
+
 				break;
 
 			/*
@@ -120,7 +123,7 @@ If [name] does not exist, an error is thrown. You can use the \`${process.env.PR
 See your shared evals. That's it.
 					`
 					)
-					.addField('\u200b', '\u200b');
+
 				break;
 
 			/*
@@ -136,7 +139,7 @@ See your shared evals. That's it.
 Deletes the eval named [name].
 					`
 					)
-					.addField('\u200b', '\u200b');
+
 				break;
 
 			/*
@@ -152,7 +155,7 @@ Deletes the eval named [name].
 Just saves the code that you inputed.
 					`
 					)
-					.addField('\u200b', '\u200b');
+
 				break;
 
 			/*
@@ -170,7 +173,7 @@ Just saves the code that you inputed.
 reruns the saved code, and overrides the previous saved result.
 					`
 					)
-					.addField('\u200b', '\u200b');
+
 				break;
 
 			/*
@@ -187,7 +190,7 @@ reruns the saved code, and overrides the previous saved result.
 Bans a user from using the bot.
 					`
 					)
-					.addField('\u200b', '\u200b');
+
 				break;
 
 			/*
@@ -206,7 +209,7 @@ Bans a user from using the bot.
 Unbans a user from using the bot.
 					`
 					)
-					.addField('\u200b', '\u200b');
+
 				break;
 
 			/*
