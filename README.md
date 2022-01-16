@@ -7,15 +7,19 @@ This is a basic setup of a Discord bot using the [sapphire framework][sapphire] 
 ### Prerequisite
 
 ```sh
-npm install
+yarn
 ```
+
+### First Development Run
+Add `key.json` into `src/`
+Add `.env.local` into `src/`
 
 ### Development
 
 This example can be run with `tsc-watch` to watch the files and automatically restart your bot.
 
 ```sh
-npm run watch:start
+yarn dev
 ```
 
 ### Production
