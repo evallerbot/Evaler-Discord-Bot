@@ -69,7 +69,7 @@ export class UserCommand extends Command {
 > \\\`\\\`\\\`[language-name]
 > [code]
 > \\\`\\\`\\\`
-Evals the [code] and shows the output. If the optional name is specified, the result is also saved and you can fetch it using the \`${process.env.PREFIX}share\` command.
+Evals the [code] and shows the output. If the optional name is specified, the result is also saved and you can fetch it using the \`${prefix}share\` command.
 Currently supported languages are,
  •Volant
  •JavaScript
@@ -101,10 +101,10 @@ If the language name is not specified, an error is thrown.`
 					.addField(
 						'Syntax',
 						`
-> \`${process.env.PREFIX}share [name]\`
+> \`${prefix}share [name]\`
 Fetches the code and output of eval named <name> if it was saved by you.
-If [name] does not exist, an error is thrown. You can use the \`${process.env.PREFIX}list\` command to see your saved evals.
-*Note that in order for share to run, you would need to have previously run \`${process.env.PREFIX}eval <name>\` to save your code that you want to share*
+If [name] does not exist, an error is thrown. You can use the \`${prefix}list\` command to see your saved evals.
+*Note that in order for share to run, you would need to have previously run \`${prefix}eval <name>\` to save your code that you want to share*
 					`
 					)
 
@@ -119,7 +119,7 @@ If [name] does not exist, an error is thrown. You can use the \`${process.env.PR
 					.addField(
 						'Syntax',
 						`
-> \`${process.env.PREFIX}list\`
+> \`${prefix}list\`
 See your shared evals. That's it.
 					`
 					)
@@ -135,7 +135,7 @@ See your shared evals. That's it.
 					.addField(
 						'Syntax',
 						`
-> \`${process.env.PREFIX}del [name]\`
+> \`${prefix}del [name]\`
 Deletes the eval named [name].
 					`
 					)
@@ -151,7 +151,7 @@ Deletes the eval named [name].
 					.addField(
 						'Syntax',
 						`
-> \`${process.env.PREFIX}save [name] [\`\`\`[code-language] [code] \`\`\`] \`
+> \`${prefix}save [name] [\`\`\`[code-language] [code] \`\`\`] \`
 Just saves the code that you inputed.
 					`
 					)
@@ -168,9 +168,9 @@ Just saves the code that you inputed.
 					.addField(
 						'Syntax',
 						`
-> \`${process.env.PREFIX}eval_saved [name] \`
-> \`${process.env.PREFIX}es [name]\`
-reruns the saved code, and overrides the previous saved result.
+> \`${prefix}eval_saved [name] \`
+> \`${prefix}es [name]\`
+Reruns the saved code, and overrides the previous saved result.
 					`
 					)
 
@@ -185,7 +185,7 @@ reruns the saved code, and overrides the previous saved result.
 					.addField(
 						'Syntax',
 						`
-> \`${process.env.PREFIX}ban [name] \`
+> \`${prefix}ban [name] \`
 **ADMIN ONLY COMMAND**
 Bans a user from using the bot.
 					`
@@ -204,7 +204,7 @@ Bans a user from using the bot.
 					.addField(
 						'Syntax',
 						`
-> \`${process.env.PREFIX}unban [name] \`
+> \`${prefix}unban [name] \`
 **ADMIN ONLY COMMAND**
 Unbans a user from using the bot.
 					`
