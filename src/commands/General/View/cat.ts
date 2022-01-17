@@ -5,6 +5,7 @@ import { Message, MessageEmbed } from 'discord.js';
 import db from '../../../lib/db';
 
 @ApplyOptions<SubCommandPluginCommandOptions>({
+	aliases: ["share"],
 	description: "Shows saved eval with a persistant sharable link",
 })
 export class UserCommand extends SubCommandPluginCommand {
