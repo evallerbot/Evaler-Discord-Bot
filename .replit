@@ -1,0 +1,1 @@
+run="yarn pm2 stop 0\nyarn pm2 delete 0\nrm -rf node\nmkdir node\ncd node && yarn init -y && yarn -D add node@16\ncd ..\nnpm config set prefix=$(pwd)/node/node_modules/node && export PATH=$(pwd)/node/node_modules/node/bin:$PATH\nyarn\nyarn build && yarn start"
