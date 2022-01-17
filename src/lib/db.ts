@@ -1,7 +1,6 @@
 import * as admin from "firebase-admin";
-import key from "../key.json";
 
 // @ts-ignore
-admin.initializeApp({ credential: admin.credential.cert(key) });
+admin.initializeApp({ credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_KEY!)) });
 
 export default admin.firestore();
