@@ -3,7 +3,8 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command, CommandOptions } from '@sapphire/framework';
 import { Message, MessageEmbed } from 'discord.js';
 import { inlineCodeBlock as iCB } from '@sapphire/utilities';
-import { blockQuote } from '@discordjs/builders';
+import { blockQuote, quote } from '@discordjs/builders';
+import { Languages } from '../../lib/evaller';
 
 const defaultEmbed = (embed: MessageEmbed, prefix: SapphirePrefix | undefined) => {
 	const adminCommands = blockQuote(
@@ -61,32 +62,28 @@ export class UserCommand extends Command {
 			 * EVAL *
 			 */
 			case 'eval':
+				const start = `
+          ${quote('eval <optional-name>')}
+          ${quote('\\`\\`\\`[language-name]')}
+          ${quote('[code]')}
+          ${quote('\\`\\`\\`')}
+        `;
+				const description = `Evals the [code] and shows the output.
+          If the optional name is specified, the result is also saved and you can fetch it using the ${prefix + iCB('share')} command.`;
+
+				let supportLangs = 'Currently supported languages are,\n';
+				for (const key in Languages) {
+					supportLangs += `• ${key}\n`;
+				}
+				supportLangs += 'If the language name is not specified, an error is thrown.';
+
 				helpPrompt.setDescription('Command `eval`!').addField(
 					'Syntax',
 					`
-> eval <optional-name> 
-> \\\`\\\`\\\`[language-name]
-> [code]
-> \\\`\\\`\\\`
-Evals the [code] and shows the output. If the optional name is specified, the result is also saved and you can fetch it using the \`${prefix}share\` command.
-Currently supported languages are,
- •Volant
- •JavaScript
- •Python
- •Java
- •C
- •C++
- •CSharp
- •Rust
- •Ruby
- •Bash
- •Sh
- •Swift
- •FSharp
- •Raku
- •Obrya
- •CookeyLang
-If the language name is not specified, an error is thrown.`
+          ${start}
+          ${description}
+          ${supportLangs}
+          `
 				);
 
 				break;
