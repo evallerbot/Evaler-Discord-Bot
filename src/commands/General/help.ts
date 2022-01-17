@@ -3,7 +3,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command, CommandOptions } from '@sapphire/framework';
 import { Message, MessageEmbed } from 'discord.js';
 import { inlineCodeBlock as iCB } from '@sapphire/utilities';
-import { blockQuote, quote } from '@discordjs/builders';
+import { blockQuote, quote, italic, bold } from '@discordjs/builders';
 import { Languages } from '../../lib/evaller';
 
 const defaultEmbed = (embed: MessageEmbed, prefix: SapphirePrefix | undefined) => {
@@ -29,6 +29,10 @@ const defaultEmbed = (embed: MessageEmbed, prefix: SapphirePrefix | undefined) =
 		.addField('User Commands', UserCommands)
 		.setFooter({ text: 'Run on Repl.it', iconURL: 'https://i.imgur.com/89E6Sie.png' })
 		.setTimestamp();
+};
+
+const syntaxHeader = (name: string, prefix: SapphirePrefix | undefined) => {
+	return quote(iCB(prefix + name));
 };
 
 @ApplyOptions<CommandOptions>({
@@ -61,13 +65,12 @@ export class UserCommand extends Command {
 			/*
 			 * EVAL *
 			 */
-			case 'eval':
-				const start = `
-          ${quote('eval <optional-name>')}
+			case 'eval': {
+				const syntax = `${quote('eval <optional-name>')}
           ${quote('\\`\\`\\`[language-name]')}
           ${quote('[code]')}
-          ${quote('\\`\\`\\`')}
-        `;
+          ${quote('\\`\\`\\`')}`;
+
 				const description = `Evals the [code] and shows the output.
           If the optional name is specified, the result is also saved and you can fetch it using the ${prefix + iCB('share')} command.`;
 
@@ -80,87 +83,94 @@ export class UserCommand extends Command {
 				helpPrompt.setDescription('Command `eval`!').addField(
 					'Syntax',
 					`
-          ${start}
+          ${syntax}
           ${description}
           ${supportLangs}
           `
 				);
 
 				break;
-
+			}
 			/*
 			 * SHARE *
 			 */
-			case 'share':
+			case 'share': {
+				const body = `Fetches the code and output of eval named <name> if it was saved by you.
+        If [name] does not exist, an error is thrown. You can use the ${iCB(prefix + 'list')} command to see your saved evals.`;
+				const bottomBody = italic(
+					`Note that in order for share to run, you would need to have previously run ${iCB(
+						prefix + 'eval <name>'
+					)} to save your code that you want to share`
+				);
+
 				helpPrompt.setDescription('Command `share`!').addField(
 					'Syntax',
 					`
-> \`${prefix}share [name]\`
-Fetches the code and output of eval named <name> if it was saved by you.
-If [name] does not exist, an error is thrown. You can use the \`${prefix}list\` command to see your saved evals.
-*Note that in order for share to run, you would need to have previously run \`${prefix}eval <name>\` to save your code that you want to share*
+          ${syntaxHeader('share [name]', prefix)}
+          ${body}
+          ${bottomBody}
 					`
 				);
 
 				break;
-
+			}
 			/*
 			 * LIST *
 			 */
-			case 'list':
+			case 'list': {
 				helpPrompt.setDescription('Command `list`!').addField(
 					'Syntax',
 					`
-> \`${prefix}list\`
-See your shared evals. That's it.
+          ${syntaxHeader('list', prefix)}
+          See your shared evals. That's it.
 					`
 				);
 
 				break;
-
+			}
 			/*
 			 * DEL *
 			 */
-			case 'del':
+			case 'del': {
 				helpPrompt.setDescription('Command `del`!').addField(
 					'Syntax',
 					`
-> \`${prefix}del [name]\`
-Deletes the eval named [name].
+          ${syntaxHeader('del [name]', prefix)}
+          Deletes the eval named [name].
 					`
 				);
 
 				break;
-
+			}
 			/*
 			 * SAVE *
 			 */
-			case 'save':
-				helpPrompt.setDescription('Command `save`!').addField(
-					'Syntax',
-					`
-> \`${prefix}save [name] [\`\`\`[code-language] [code] \`\`\`] \`
-Just saves the code that you inputed.
-					`
-				);
+			case 'save': {
+				const syntax = `${quote('save [name]')}
+          ${quote('\\`\\`\\`[language-name]')}
+          ${quote('[code]')}
+          ${quote('\\`\\`\\`')}`;
+
+				helpPrompt.setDescription('Command `save`!').addField('Syntax', syntax);
 
 				break;
-
+			}
 			/*
 			 * EVAL_SAVED || ES *
 			 */
 			case 'eval_saved':
-			case 'es':
+			case 'es': {
 				helpPrompt.setDescription('Command `eval_saved`!').addField(
 					'Syntax',
 					`
-> \`${prefix}eval_saved [name] \`
-> \`${prefix}es [name]\`
-Reruns the saved code, and overrides the previous saved result.
-					`
+          ${syntaxHeader('eval_saved [name]', prefix)}
+          ${syntaxHeader('es [name]', prefix)}
+          Reruns the saved code, and overrides the previous saved result.
+          `
 				);
 
 				break;
+			}
 
 			/*
 			 * BAN *
@@ -169,9 +179,9 @@ Reruns the saved code, and overrides the previous saved result.
 				helpPrompt.setDescription('Command `ban`!').addField(
 					'Syntax',
 					`
-> \`${prefix}ban [name] \`
-**ADMIN ONLY COMMAND**
-Bans a user from using the bot.
+          ${syntaxHeader('ban [name]', prefix)}
+          ${bold('ADMIN ONLY COMMAND')}
+          Bans a user from using the bot.
 					`
 				);
 
@@ -188,10 +198,10 @@ Bans a user from using the bot.
 					.addField(
 						'Syntax',
 						`
-> \`${prefix}unban [name] \`
-**ADMIN ONLY COMMAND**
-Unbans a user from using the bot.
-					`
+            ${syntaxHeader('unban [name]', prefix)}
+            ${bold('ADMIN ONLY COMMAND')}
+            Unbans a user from using the bot.
+					  `
 					);
 
 				break;
