@@ -4,7 +4,7 @@ import { Message, MessageEmbed } from 'discord.js';
 import db from '../../../lib/db';
 
 @ApplyOptions<SubCommandPluginCommandOptions>({
-	aliases: ["ls"],
+	aliases: ["list"],
 	description: "Lists all saved evals of the user",
 })
 export class UserCommand extends SubCommandPluginCommand {
