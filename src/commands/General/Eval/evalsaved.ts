@@ -44,7 +44,7 @@ export class UserCommand extends SubCommandPluginCommand {
 		let data = "";
 		let lastData = data;
 
-		let editor = setInterval(() => {
+		let editor: NodeJS.Timer | undefined = setInterval(() => {
 			if(data != lastData){
 				msg.edit({ embeds: [embed] });
 				lastData = data;
@@ -61,7 +61,8 @@ export class UserCommand extends SubCommandPluginCommand {
 				embed.fields![1].value = codeBlock("sh", data);
 
 				evaller.off("out", onOutput);
-				clearInterval(editor);
+				clearInterval(editor!);
+				editor = undefined;
 
 				await msg.edit({ embeds: [embed] });
 				await msg.channel.send("You can't save output larger than 1024 characters.");
