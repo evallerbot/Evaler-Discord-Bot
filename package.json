@@ -23,7 +23,7 @@
     "cors": "^2.8.5",
     "discord.js": "^13.3.1",
     "dotenv-cra": "^3.0.2",
-    "express": "^4.17.2",
+    "express": "^4.17.3",
     "firebase-admin": "^10.0.1",
     "isomorphic-unfetch": "^3.1.0",
     "morgan": "^1.10.0",
